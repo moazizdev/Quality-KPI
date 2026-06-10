@@ -31,5 +31,8 @@ quality_kpi_backup_*.db
 Thumbs.db
 Desktop.ini
 
+# LibreOffice lock files
+.~lock.*#
+
 # Config (user-specific)
 config.ini
