@@ -315,6 +315,19 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
+// ─── Table scroll shadow ──────────────────────────────────────────────────────
+function updateTableScrollShadows() {
+  document.querySelectorAll('.table-wrap').forEach(wrap => {
+    const hasScroll = wrap.scrollWidth > wrap.clientWidth;
+    wrap.classList.toggle('is-scrollable', hasScroll);
+  });
+}
+document.addEventListener('DOMContentLoaded', updateTableScrollShadows);
+const _tableObserver = new MutationObserver(updateTableScrollShadows);
+document.addEventListener('DOMContentLoaded', () => {
+  _tableObserver.observe(document.getElementById('content'), { childList: true, subtree: true });
+});
+
 // ─── Toast Notifications ─────────────────────────────────────────────────────
 const TOAST_TYPES = { success: '#10b981', error: '#ef4444', info: '#3b82f6', warning: '#f59e0b' };
 
