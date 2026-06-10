@@ -1,0 +1,361 @@
+// ─── Arabic ↔ English Translation Dictionary ────────────────────────────────
+
+const LANG_KEY = 'quality_kpi_lang';
+const DEFAULT_LANG = 'ar';
+
+const translations = {
+  // ── Navigation ──
+  'Dashboard': { en: 'Dashboard', ar: 'لوحة التحكم' },
+  'Master Data': { en: 'Master Data', ar: 'البيانات الأساسية' },
+  'Halls': { en: 'Halls', ar: 'الصالات' },
+  'Machines': { en: 'Machines', ar: 'الماكينات' },
+  'Products': { en: 'Products', ar: 'المنتجات' },
+  'Defect Categories': { en: 'Defect Categories', ar: 'تصنيفات العيوب' },
+  'Users': { en: 'Users', ar: 'المستخدمين' },
+  'Operations': { en: 'Operations', ar: 'العمليات' },
+  'Production Records': { en: 'Production Records', ar: 'سجلات الإنتاج' },
+  'CAPA Cases': { en: 'CAPA Cases', ar: 'حالات CAPA' },
+  'Customer Complaints': { en: 'Customer Complaints', ar: 'شكاوى العملاء' },
+  'Reports': { en: 'Reports', ar: 'التقارير' },
+  'Weekly Report': { en: 'Weekly Report', ar: 'التقرير الأسبوعي' },
+  'Database Backup': { en: 'Database Backup', ar: 'النسخ الاحتياطي' },
+  'Departments': { en: 'Departments', ar: 'الأقسام' },
+  'Audit Logs': { en: 'Audit Logs', ar: 'سجل التدقيق' },
+
+  // ── Login ──
+  'Quality KPI System': { en: 'Quality KPI System', ar: 'نظام مؤشرات الجودة' },
+  'Login': { en: 'Login', ar: 'تسجيل الدخول' },
+  'Username': { en: 'Username', ar: 'اسم المستخدم' },
+  'Password': { en: 'Password', ar: 'كلمة المرور' },
+  'Signing in...': { en: 'Signing in...', ar: 'جاري تسجيل الدخول...' },
+  'Enter username and password': { en: 'Enter username and password', ar: 'أدخل اسم المستخدم وكلمة المرور' },
+  'Login failed': { en: 'Login failed', ar: 'فشل تسجيل الدخول' },
+  'Logout': { en: 'Logout', ar: 'تسجيل الخروج' },
+  'Session expired': { en: 'Session expired', ar: 'انتهت الجلسة' },
+
+  // ── Buttons / UI ──
+  'Add': { en: 'Add', ar: 'إضافة' },
+  'Add Record': { en: 'Add Record', ar: 'إضافة سجل' },
+  'Add Production Record': { en: 'Add Production Record', ar: 'إضافة سجل إنتاج' },
+  '+ Add Deviation': { en: '+ Add Deviation', ar: '+ إضافة مخالفة' },
+  'Add Deviation': { en: 'Add Deviation', ar: 'إضافة مخالفة' },
+  'Add CAPA': { en: 'Add CAPA', ar: 'إضافة CAPA' },
+  'Add CAPA Case': { en: 'Add CAPA Case', ar: 'إضافة حالة CAPA' },
+  'Edit CAPA Case': { en: 'Edit CAPA Case', ar: 'تعديل حالة CAPA' },
+  'Add Complaint': { en: 'Add Complaint', ar: 'إضافة شكوى' },
+  'Edit Complaint': { en: 'Edit Complaint', ar: 'تعديل الشكوى' },
+  'Add Category': { en: 'Add Category', ar: 'إضافة تصنيف' },
+  'Add Defect Category': { en: 'Add Defect Category', ar: 'إضافة تصنيف عيوب' },
+  'Add Hall': { en: 'Add Hall', ar: 'إضافة صالة' },
+  'Add Machine': { en: 'Add Machine', ar: 'إضافة ماكينة' },
+  'Add Product': { en: 'Add Product', ar: 'إضافة منتج' },
+  'Edit Product': { en: 'Edit Product', ar: 'تعديل المنتج' },
+  'Add User': { en: 'Add User', ar: 'إضافة مستخدم' },
+  'Edit User': { en: 'Edit User', ar: 'تعديل المستخدم' },
+  'Export Excel': { en: 'Export Excel', ar: 'تصدير Excel' },
+  'Edit': { en: 'Edit', ar: 'تعديل' },
+  'Delete': { en: 'Delete', ar: 'حذف' },
+  'Cancel': { en: 'Cancel', ar: 'إلغاء' },
+  'Save': { en: 'Save', ar: 'حفظ' },
+  'Generate': { en: 'Generate', ar: 'توليد' },
+  'Apply': { en: 'Apply', ar: 'تطبيق' },
+  'Clear': { en: 'Clear', ar: 'مسح' },
+  'DOCX': { en: 'DOCX', ar: 'DOCX' },
+  'PDF': { en: 'PDF', ar: 'PDF' },
+  'Loading...': { en: 'Loading...', ar: 'جارٍ التحميل...' },
+  'Per page': { en: 'Per page', ar: 'لكل صفحة' },
+  'of': { en: 'of', ar: 'من' },
+  '-- None --': { en: '-- None --', ar: '-- لا أحد --' },
+
+  // ── Halls ──
+  'Manage Halls': { en: 'Manage Halls', ar: 'إدارة الصالات' },
+  'Hall Name': { en: 'Hall Name', ar: 'اسم الصالة' },
+  'Hall': { en: 'Hall', ar: 'الصالة' },
+  'Hall created': { en: 'Hall created', ar: 'تم إنشاء الصالة' },
+  'Hall updated': { en: 'Hall updated', ar: 'تم تحديث الصالة' },
+  'Hall deleted': { en: 'Hall deleted', ar: 'تم حذف الصالة' },
+  'Delete this hall?': { en: 'Delete this hall?', ar: 'حذف هذه الصالة؟' },
+  'Name is required': { en: 'Name is required', ar: 'الاسم مطلوب' },
+
+  // ── Machines ──
+  'Manage Machines': { en: 'Manage Machines', ar: 'إدارة الماكينات' },
+  'Machine Code': { en: 'Machine Code', ar: 'كود الماكينة' },
+  'Machine Name': { en: 'Machine Name', ar: 'اسم الماكينة' },
+  'Assigned Engineer': { en: 'Assigned Engineer', ar: 'المهندس المسند' },
+  'Assigned User': { en: 'Assigned User', ar: 'المستخدم المسند' },
+  'Machine': { en: 'Machine', ar: 'الماكينة' },
+  'Machine created': { en: 'Machine created', ar: 'تم إنشاء الماكينة' },
+  'Machine updated': { en: 'Machine updated', ar: 'تم تحديث الماكينة' },
+  'Machine deleted': { en: 'Machine deleted', ar: 'تم حذف الماكينة' },
+  'Delete this machine?': { en: 'Delete this machine?', ar: 'حذف هذه الماكينة؟' },
+  'All fields required': { en: 'All fields required', ar: 'جميع الحقول مطلوبة' },
+
+  // ── Products ──
+  'Manage Products': { en: 'Manage Products', ar: 'إدارة المنتجات' },
+  'Name (EN)': { en: 'Name (EN)', ar: 'الاسم (إنج)' },
+  'Name (AR)': { en: 'Name (AR)', ar: 'الاسم (عربي)' },
+  'Name (English)': { en: 'Name (English)', ar: 'الاسم بالإنجليزية' },
+  'Name (Arabic)': { en: 'Name (Arabic)', ar: 'الاسم بالعربية' },
+  'Product': { en: 'Product', ar: 'المنتج' },
+  'Default Pieces': { en: 'Default Pieces', ar: 'القطع الافتراضية' },
+  'Pcs': { en: 'Pcs', ar: 'قطعة' },
+  'Ice': { en: 'Ice', ar: 'ثلج' },
+  'Sauce': { en: 'Sauce', ar: 'صلصة' },
+  'Biscuit': { en: 'Biscuit', ar: 'بسكويت' },
+  'Min Weight': { en: 'Min Weight', ar: 'الحد الأدنى للوزن' },
+  'Max Weight': { en: 'Max Weight', ar: 'الحد الأقصى للوزن' },
+  'Min': { en: 'Min', ar: 'الحد الأدنى' },
+  'Max': { en: 'Max', ar: 'الحد الأقصى' },
+  'English name is required': { en: 'English name is required', ar: 'الاسم الإنجليزي مطلوب' },
+  'Product created': { en: 'Product created', ar: 'تم إنشاء المنتج' },
+  'Product updated': { en: 'Product updated', ar: 'تم تحديث المنتج' },
+  'Product deleted': { en: 'Product deleted', ar: 'تم حذف المنتج' },
+  'Delete this product?': { en: 'Delete this product?', ar: 'حذف هذا المنتج؟' },
+
+  // ── Defect Categories ──
+  'Code': { en: 'Code', ar: 'الكود' },
+  'Name': { en: 'Name', ar: 'الاسم' },
+  'Description': { en: 'Description', ar: 'الوصف' },
+  'Defect Code': { en: 'Defect Code', ar: 'كود العيب' },
+  'Defect Name': { en: 'Defect Name', ar: 'اسم العيب' },
+  'Code and name required': { en: 'Code and name required', ar: 'الكود والاسم مطلوبان' },
+  'Category created': { en: 'Category created', ar: 'تم إنشاء التصنيف' },
+  'Category updated': { en: 'Category updated', ar: 'تم تحديث التصنيف' },
+  'Category deleted': { en: 'Category deleted', ar: 'تم حذف التصنيف' },
+  'Delete this category?': { en: 'Delete this category?', ar: 'حذف هذا التصنيف؟' },
+
+  // ── Production Records ──
+  'ID': { en: 'ID', ar: 'المعرف' },
+  'Batch': { en: 'Batch', ar: 'الباتش' },
+  'Date': { en: 'Date', ar: 'التاريخ' },
+  'Time': { en: 'Time', ar: 'الوقت' },
+  'Shift': { en: 'Shift', ar: 'الوردية' },
+  'Pieces': { en: 'Pieces', ar: 'القطع' },
+  'Defects': { en: 'Defects', ar: 'العيوب' },
+  'Rate': { en: 'Rate', ar: 'المعدل' },
+  'Actual Wt': { en: 'Actual Wt', ar: 'الوزن الفعلي' },
+  'Batch No': { en: 'Batch No', ar: 'رقم الباتش' },
+  'Production Date': { en: 'Production Date', ar: 'تاريخ الإنتاج' },
+  'Time (24h)': { en: 'Time (24h)', ar: 'الوقت (24 س)' },
+  'Morning': { en: 'Morning', ar: 'صباحي' },
+  'Afternoon': { en: 'Afternoon', ar: 'مسائي' },
+  'Night': { en: 'Night', ar: 'ليلي' },
+  'Actual Weight': { en: 'Actual Weight', ar: 'الوزن الفعلي' },
+  'Ice Weight': { en: 'Ice Weight', ar: 'وزن الثلج' },
+  'Sauce Weight': { en: 'Sauce Weight', ar: 'وزن الصلصة' },
+  'Biscuit Weight': { en: 'Biscuit Weight', ar: 'وزن البسكويت' },
+  'Pieces Produced': { en: 'Pieces Produced', ar: 'القطع المنتجة' },
+  'Total pieces made': { en: 'Total pieces made', ar: 'إجمالي القطع المنتجة' },
+  'Min / Max Weight': { en: 'Min / Max Weight', ar: 'الحد الأدنى / الأقصى للوزن' },
+  'Record created': { en: 'Record created', ar: 'تم إنشاء السجل' },
+  'Record updated': { en: 'Record updated', ar: 'تم تحديث السجل' },
+  'Record deleted': { en: 'Record deleted', ar: 'تم حذف السجل' },
+  'Delete this record?': { en: 'Delete this record?', ar: 'حذف هذا السجل؟' },
+  'Batch and date required': { en: 'Batch and date required', ar: 'الباتش والتاريخ مطلوبان' },
+
+  // ── Deviations ──
+  'Deviations': { en: 'Deviations', ar: 'المخالفات' },
+  'Deviation': { en: 'Deviation', ar: 'المخالفة' },
+  'Deviation created': { en: 'Deviation created', ar: 'تم تسجيل المخالفة' },
+  'Deviation updated': { en: 'Deviation updated', ar: 'تم تحديث المخالفة' },
+  'Deviation deleted': { en: 'Deviation deleted', ar: 'تم حذف المخالفة' },
+  'Delete this deviation?': { en: 'Delete this deviation?', ar: 'حذف هذه المخالفة؟' },
+  'Defect Category': { en: 'Defect Category', ar: 'تصنيف العيب' },
+  'Qty': { en: 'Qty', ar: 'الكمية' },
+  'Quantity': { en: 'Quantity', ar: 'الكمية' },
+  'Notes': { en: 'Notes', ar: 'ملاحظات' },
+  'Date and quantity required': { en: 'Date and quantity required', ar: 'التاريخ والكمية مطلوبان' },
+
+  // ── CAPA ──
+  'Status': { en: 'Status', ar: 'الحالة' },
+  'Department': { en: 'Department', ar: 'القسم' },
+  'Probable Cause': { en: 'Probable Cause', ar: 'السبب المحتمل' },
+  'Created': { en: 'Created', ar: 'تاريخ الإنشاء' },
+  'Immediate Correction': { en: 'Immediate Correction', ar: 'التصحيح الفوري' },
+  'Corrective Action': { en: 'Corrective Action', ar: 'الإجراء التصحيحي' },
+  'Preventive Action': { en: 'Preventive Action', ar: 'الإجراء الوقائي' },
+  'CAPA updated': { en: 'CAPA updated', ar: 'تم تحديث CAPA' },
+  'CAPA created': { en: 'CAPA created', ar: 'تم إنشاء CAPA' },
+  'CAPA deleted': { en: 'CAPA deleted', ar: 'تم حذف CAPA' },
+  'Delete this CAPA case?': { en: 'Delete this CAPA case?', ar: 'حذف حالة CAPA هذه؟' },
+  'Open': { en: 'Open', ar: 'مفتوحة' },
+  'In Progress': { en: 'In Progress', ar: 'قيد التنفيذ' },
+  'Closed': { en: 'Closed', ar: 'مغلقة' },
+
+  // ── Complaints ──
+  'Number': { en: 'Number', ar: 'الرقم' },
+  'Customer': { en: 'Customer', ar: 'العميل' },
+  'Summary': { en: 'Summary', ar: 'الملخص' },
+  'Customer Name': { en: 'Customer Name', ar: 'اسم العميل' },
+  'Complaint Number': { en: 'Complaint Number', ar: 'رقم الشكوى' },
+  'Assigned Department': { en: 'Assigned Department', ar: 'القسم المسند' },
+  'Assigned To': { en: 'Assigned To', ar: 'مسند إلى' },
+  'Resolution': { en: 'Resolution', ar: 'الحل' },
+  'Customer, number, and summary required': { en: 'Customer, number, and summary required', ar: 'العميل والرقم والملخص مطلوبون' },
+  'Complaint updated': { en: 'Complaint updated', ar: 'تم تحديث الشكوى' },
+  'Complaint created': { en: 'Complaint created', ar: 'تم إنشاء الشكوى' },
+  'Complaint deleted': { en: 'Complaint deleted', ar: 'تم حذف الشكوى' },
+  'Delete this complaint?': { en: 'Delete this complaint?', ar: 'حذف هذه الشكوى؟' },
+  'Under Review': { en: 'Under Review', ar: 'قيد المراجعة' },
+  'Resolved': { en: 'Resolved', ar: 'تم الحل' },
+  'Notified': { en: 'Notified', ar: 'تم الإخطار' },
+
+  // ── Users ──
+  'Manage Users': { en: 'Manage Users', ar: 'إدارة المستخدمين' },
+  'Full Name': { en: 'Full Name', ar: 'الاسم الكامل' },
+  'Role': { en: 'Role', ar: 'الدور' },
+  'Assigned Machines': { en: 'Assigned Machines', ar: 'الماكينات المسندة' },
+  'Engineer': { en: 'Engineer', ar: 'مهندس' },
+  'Admin': { en: 'Admin', ar: 'مدير' },
+  'Active': { en: 'Active', ar: 'نشط' },
+  'Inactive': { en: 'Inactive', ar: 'غير نشط' },
+  'User updated': { en: 'User updated', ar: 'تم تحديث المستخدم' },
+  'User created': { en: 'User created', ar: 'تم إنشاء المستخدم' },
+  'User deleted': { en: 'User deleted', ar: 'تم حذف المستخدم' },
+  'Delete this user? Machines assigned to them will be unassigned.': {
+    en: 'Delete this user? Machines assigned to them will be unassigned.',
+    ar: 'حذف هذا المستخدم؟ سيتم إلغاء إسناد الماكينات المرتبطة به.'
+  },
+  'Username is required': { en: 'Username is required', ar: 'اسم المستخدم مطلوب' },
+  'Password is required for new users': { en: 'Password is required for new users', ar: 'كلمة المرور مطلوبة للمستخدمين الجدد' },
+  'Password too short': { en: 'Password too short', ar: 'كلمة المرور قصيرة جداً' },
+  'Leave blank to keep': { en: 'Leave blank to keep', ar: 'اتركه فارغاً للاحتفاظ به' },
+  'Required': { en: 'Required', ar: 'مطلوب' },
+  'Only admins can manage users.': { en: 'Only admins can manage users.', ar: 'فقط المدراء يمكنهم إدارة المستخدمين.' },
+
+  // ── Dashboard ──
+  'Defect Rate': { en: 'Defect Rate', ar: 'نسبة العيوب' },
+  'Open CAPA Cases': { en: 'Open CAPA Cases', ar: 'حالات CAPA المفتوحة' },
+  'Open Complaints': { en: 'Open Complaints', ar: 'الشكاوى المفتوحة' },
+  'Defects by Category': { en: 'Defects by Category', ar: 'العيوب حسب التصنيف' },
+  'Defects by Machine': { en: 'Defects by Machine', ar: 'العيوب حسب الماكينة' },
+  'Date From': { en: 'Date From', ar: 'من تاريخ' },
+  'Date To': { en: 'Date To', ar: 'إلى تاريخ' },
+  'total defect qty': { en: 'total defect qty', ar: 'إجمالي كمية العيوب' },
+  'Failed to load dashboard': { en: 'Failed to load dashboard', ar: 'فشل تحميل لوحة التحكم' },
+
+  // ── Weekly Report ──
+  'Weekly Performance Report': { en: 'Weekly Performance Report', ar: 'تقرير الأداء الأسبوعي' },
+  'Week starting': { en: 'Week starting', ar: 'بداية الأسبوع' },
+  'Period': { en: 'Period', ar: 'الفترة' },
+  'Total Defect Qty': { en: 'Total Defect Qty', ar: 'إجمالي كمية العيوب' },
+  'Overall Defect Rate': { en: 'Overall Defect Rate', ar: 'نسبة العيوب الإجمالية' },
+  'Department Distribution': { en: 'Department Distribution', ar: 'توزيع الأقسام' },
+  'Top Defect Categories': { en: 'Top Defect Categories', ar: 'أهم تصنيفات العيوب' },
+  'Department Defect Distribution': { en: 'Department Defect Distribution', ar: 'توزيع عيوب الأقسام' },
+  'Rate %': { en: 'Rate %', ar: 'النسبة %' },
+  'No defects recorded': { en: 'No defects recorded', ar: 'لا توجد عيوب مسجلة' },
+  'All Defect Categories By Quantity': { en: 'All Defect Categories By Quantity', ar: 'جميع تصنيفات العيوب حسب الكمية' },
+  'Failed to load report': { en: 'Failed to load report', ar: 'فشل تحميل التقرير' },
+  'Select a week and click Generate': { en: 'Select a week and click Generate', ar: 'اختر أسبوعاً وانقر توليد' },
+  'Download failed': { en: 'Download failed', ar: 'فشل التحميل' },
+  'Exported successfully': { en: 'Exported successfully', ar: 'تم التصدير بنجاح' },
+  'Total Quantity': { en: 'Total Quantity', ar: 'الكمية الإجمالية' },
+  'Percentage': { en: 'Percentage', ar: 'النسبة المئوية' },
+
+  // ── Misc ──
+  // ── Departments ──
+  'Manage Departments': { en: 'Manage Departments', ar: 'إدارة الأقسام' },
+  'Add Department': { en: 'Add Department', ar: 'إضافة قسم' },
+  'Edit Department': { en: 'Edit Department', ar: 'تعديل القسم' },
+  'English Name': { en: 'English Name', ar: 'الاسم بالإنجليزية' },
+  'Defect Prefixes': { en: 'Defect Prefixes', ar: 'بادئات العيوب' },
+  'Comma-separated defect code prefixes, e.g. AD,Q,W': { en: 'Comma-separated defect code prefixes, e.g. AD,Q,W', ar: 'بادئات أكواد العيوب مفصولة بفواصل، مثال: AD,Q,W' },
+  'e.g. AD,Q,W': { en: 'e.g. AD,Q,W', ar: 'مثال: AD,Q,W' },
+  'Sort Order': { en: 'Sort Order', ar: 'ترتيب الفرز' },
+  'Department created': { en: 'Department created', ar: 'تم إنشاء القسم' },
+  'Department updated': { en: 'Department updated', ar: 'تم تحديث القسم' },
+  'Department deleted': { en: 'Department deleted', ar: 'تم حذف القسم' },
+  'Delete this department?': { en: 'Delete this department?', ar: 'حذف هذا القسم؟' },
+
+  'Export failed': { en: 'Export failed', ar: 'فشل التصدير' },
+  'Actions': { en: 'Actions', ar: 'الإجراءات' },
+  'Month': { en: 'Month', ar: 'الشهر' },
+  'Week': { en: 'Week', ar: 'الأسبوع' },
+  'Day': { en: 'Day', ar: 'اليوم' },
+  'Filter': { en: 'Filter', ar: 'تصفية' },
+  'Search': { en: 'Search', ar: 'بحث' },
+  'Total': { en: 'Total', ar: 'المجموع' },
+  'Average': { en: 'Average', ar: 'المتوسط' },
+  'Count': { en: 'Count', ar: 'العدد' },
+  'Yes': { en: 'Yes', ar: 'نعم' },
+  'No': { en: 'No', ar: 'لا' },
+  'Confirm': { en: 'Confirm', ar: 'تأكيد' },
+  'Close': { en: 'Close', ar: 'إغلاق' },
+  'Submit': { en: 'Submit', ar: 'إرسال' },
+  'Print': { en: 'Print', ar: 'طباعة' },
+  'Download': { en: 'Download', ar: 'تحميل' },
+  'Upload': { en: 'Upload', ar: 'رفع' },
+  'Back': { en: 'Back', ar: 'رجوع' },
+  'Next': { en: 'Next', ar: 'التالي' },
+  'Prev': { en: 'Prev', ar: 'السابق' },
+  'First': { en: 'First', ar: 'الأول' },
+  'Last': { en: 'Last', ar: 'الأخير' },
+  'completed': { en: 'completed', ar: 'مكتمل' },
+  'failed': { en: 'failed', ar: 'فشل' },
+  'success': { en: 'success', ar: 'نجاح' },
+  'error': { en: 'error', ar: 'خطأ' },
+  'warning': { en: 'warning', ar: 'تحذير' },
+  'info': { en: 'info', ar: 'معلومة' },
+  'network_error': { en: 'Network error', ar: 'خطأ في الشبكة' },
+  'User': { en: 'User', ar: 'المستخدم' },
+
+  // ── Backup ──
+  'backup': { en: 'Database Backup', ar: 'النسخ الاحتياطي' },
+  'database_location': { en: 'Database Location', ar: 'موقع قاعدة البيانات' },
+  'path': { en: 'Path', ar: 'المسار' },
+  'size': { en: 'Size', ar: 'الحجم' },
+  'status': { en: 'Status', ar: 'الحالة' },
+  'available': { en: 'Available', ar: 'متاح' },
+  'not_found': { en: 'Not found', ar: 'غير موجود' },
+  'backup_actions': { en: 'Backup Actions', ar: 'إجراءات النسخ الاحتياطي' },
+  'download_backup': { en: 'Download Backup', ar: 'تحميل نسخة احتياطية' },
+  'create_backup_copy': { en: 'Create Backup Copy', ar: 'إنشاء نسخة احتياطية' },
+  'existing_backups': { en: 'Existing Backups', ar: 'النسخ الاحتياطية الموجودة' },
+  'backup_downloaded': { en: 'Backup downloaded successfully', ar: 'تم تحميل النسخة الاحتياطية بنجاح' },
+
+  // ── Audit Logs ──
+  'Audit Log': { en: 'Audit Log', ar: 'سجل التدقيق' },
+  'All Actions': { en: 'All Actions', ar: 'جميع الإجراءات' },
+  'All Types': { en: 'All Types', ar: 'جميع الأنواع' },
+  'Action': { en: 'Action', ar: 'الإجراء' },
+  'Type': { en: 'Type', ar: 'النوع' },
+  'Details': { en: 'Details', ar: 'التفاصيل' },
+  'No logs found': { en: 'No logs found', ar: 'لا توجد سجلات' },
+  'Admin access required': { en: 'Admin access required', ar: 'صلاحية المدير مطلوبة' },
+  'records': { en: 'records', ar: 'سجل' },
+  'Refresh': { en: 'Refresh', ar: 'تحديث' },
+
+  // ── Pull to Refresh ──
+  'Pull to refresh': { en: 'Pull to refresh', ar: 'اسحب للتحديث' },
+  'Release to refresh': { en: 'Release to refresh', ar: 'أفلت للتحديث' },
+  'Refreshing...': { en: 'Refreshing...', ar: 'جاري التحديث...' },
+};
+
+// ─── Language functions ──────────────────────────────────────────────────────
+
+function getLang() {
+  return localStorage.getItem(LANG_KEY) || DEFAULT_LANG;
+}
+
+function setLang(lang) {
+  localStorage.setItem(LANG_KEY, lang);
+  document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+  document.documentElement.lang = lang;
+}
+
+function __(key) {
+  const lang = getLang();
+  const entry = translations[key];
+  if (!entry) return key;
+  return entry[lang] ?? entry.en ?? key;
+}
+
+// Expose globally
+window.__ = __;
+window.getLang = getLang;
+window.setLang = setLang;
+window.info = (t) => `<span class="info-circle" title="${t}">ⓘ</span>`;
+
+// Init on load
+document.addEventListener('DOMContentLoaded', () => setLang(getLang()));

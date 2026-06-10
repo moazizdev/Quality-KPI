@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#1e293b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<title>نظام مؤشرات الجودة</title>
+<link rel="stylesheet" href="css/styles.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<div id="login-overlay" class="modal-overlay active">
+  <div class="modal" style="max-width:400px">
+    <div class="modal-header"><span id="login-title">نظام مؤشرات الجودة</span></div>
+    <div class="modal-body">
+      <div id="login-error" style="color:#d32f2f;font-size:13px;margin-bottom:8px;display:none"></div>
+      <div class="form-group"><label>Username</label><input class="form-control" id="login-username" autocomplete="username"></div>
+      <div class="form-group"><label>Password</label><input class="form-control" id="login-password" type="password" autocomplete="current-password"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" id="login-btn" onclick="authLogin()" style="width:100%">Login</button>
+    </div>
+  </div>
+</div>
+<div id="app">
+  <aside id="sidebar">
+    <div class="sidebar-header">
+      <h2>Quality KPI</h2>
+      <span class="version">v1.0</span>
+    </div>
+    <div style="padding:8px 16px;border-bottom:1px solid rgba(255,255,255,.08)">
+      <select id="lang-select" onchange="switchLang(this.value)" style="width:100%;padding:6px 8px;border-radius:4px;background:#334155;color:#e2e8f0;border:1px solid rgba(255,255,255,.1);font-size:13px;cursor:pointer">
+        <option value="ar">🇪🇬 العربية</option>
+        <option value="en">🇬🇧 English</option>
+      </select>
+    </div>
+    <nav id="nav"></nav>
+  </aside>
+  <main id="main">
+    <header id="topbar">
+      <button id="menu-toggle" onclick="document.getElementById('sidebar').classList.toggle('collapsed');">&#9776;</button>
+      <span id="page-title">Dashboard</span>
+      <div style="margin-left:auto;display:flex;align-items:center;gap:12px">
+        <span id="user-info" style="font-size:13px;color:#64748b"></span>
+        <button id="logout-btn" class="btn btn-sm" style="display:none" onclick="authLogout()">Logout</button>
+      </div>
+    </header>
+    <div id="content">
+      <div id="page-loader"><div class="spinner"></div></div>
+      <div id="ptr-indicator"><div class="ptr-inner"><span id="ptr-arrow">&#8595;</span><span id="ptr-text">Pull to refresh</span></div></div>
+      <div class="page active" id="page-dashboard" data-init="1"></div>
+      <div class="page" id="page-halls" data-init="1"></div>
+      <div class="page" id="page-machines" data-init="1"></div>
+      <div class="page" id="page-products" data-init="1"></div>
+      <div class="page" id="page-defect-categories" data-init="1"></div>
+      <div class="page" id="page-production" data-init="1"></div>
+      <div class="page" id="page-deviations" data-init="1"></div>
+      <div class="page" id="page-capa" data-init="1"></div>
+      <div class="page" id="page-complaints" data-init="1"></div>
+      <div class="page" id="page-users" data-init="1"></div>
+      <div class="page" id="page-weekly-report" data-init="1"></div>
+      <div class="page" id="page-backup" data-init="1"></div>
+      <div class="page" id="page-departments" data-init="1"></div>
+      <div class="page" id="page-audit-logs" data-init="1"></div>
+    </div>
+  </main>
+</div>
+<div id="toast-container"></div>
+<div id="sidebar-backdrop"></div>
+<script type="module" src="js/app.js"></script>
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(function() {});
+}
+</script>
+</body>
+</html>
