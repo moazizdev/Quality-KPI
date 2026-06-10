@@ -9,7 +9,10 @@ function getWeekStart(d) {
   const diff = day === 6 ? 0 : day + 1;
   const start = new Date(d);
   start.setDate(d.getDate() - diff);
-  return start.toISOString().split('T')[0];
+  const y = start.getFullYear();
+  const m = String(start.getMonth() + 1).padStart(2, '0');
+  const dd = String(start.getDate()).padStart(2, '0');
+  return `${y}-${m}-${dd}`;
 }
 
 function destroyCharts() {
