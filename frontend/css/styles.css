@@ -175,7 +175,7 @@ select.form-control{appearance:auto}
   .kpi-card .kpi-label{font-size:11px}
   th,td{padding:8px 8px;font-size:12px}
   th{font-size:10px}
-  .table-wrap{margin:0 -8px;border-radius:0}
+  .table-wrap{margin:0;border-radius:0}
   .form-control{font-size:13px;padding:7px 10px}
   .form-group label{font-size:12px}
   .card-body{padding:10px}
