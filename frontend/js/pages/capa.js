@@ -6,7 +6,7 @@ let totalRecords = 0;
 
 window.init_capa = async function () {
   document.getElementById('page-capa').innerHTML = `
-    <div class="toolbar"><h3>${__('CAPA Cases')}</h3><div class="btn-group"><button class="btn btn-primary" onclick="openCapaForm()">+ ${__('Add CAPA')}</button><button class="btn btn-secondary" onclick="exportExcel('/capa/export/excel')">${__('Export Excel')}</button></div></div>
+    <div class="toolbar"><h3>${__('CAPA Cases')}</h3><input type="search" class="table-search" id="capa-search" placeholder="${__('Search')}..." oninput="filterTable('capa-tbody', this.value)"><div class="btn-group"><button class="btn btn-primary" onclick="openCapaForm()">+ ${__('Add CAPA')}</button><button class="btn btn-secondary" onclick="exportExcel('/capa/export/excel')">${__('Export Excel')}</button></div></div>
     <div class="card"><div class="table-wrap"><table><thead><tr><th>${__('ID')}</th><th>${__('Deviation')}</th><th>${__('Status')}</th><th>${__('Department')}</th><th>${__('Probable Cause')}</th><th>${__('Time')}</th><th>${__('Created')}</th><th>${__('Actions')}</th></tr></thead><tbody id="capa-tbody"></tbody></table></div>
     <div class="pagination" id="capa-pagination"></div></div>
     <div class="modal-overlay" id="capa-modal"><div class="modal">

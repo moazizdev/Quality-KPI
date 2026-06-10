@@ -12,6 +12,7 @@ window.init_audit_logs = async function () {
   content.innerHTML = `
     <div class="toolbar">
       <h3>${__('Audit Logs')}</h3>
+      <input type="search" class="table-search" id="audit-search" placeholder="${__('Search')}..." oninput="filterTable('audit-tbody', this.value)">
       <div class="btn-group">
         <select id="audit-filter-action" class="form-control" style="width:auto" onchange="init_audit_logs()">
           <option value="">${__('All Actions')}</option>

@@ -315,6 +315,15 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
+// ─── Table search ─────────────────────────────────────────────────────────────
+window.filterTable = function (tbodyId, query) {
+  const q = query.toLowerCase().trim();
+  document.querySelectorAll(`#${tbodyId} tr`).forEach(tr => {
+    if (!q) { tr.style.display = ''; return; }
+    tr.style.display = Array.from(tr.querySelectorAll('td')).some(td => td.textContent.toLowerCase().includes(q)) ? '' : 'none';
+  });
+};
+
 // ─── Table scroll shadow ──────────────────────────────────────────────────────
 function updateTableScrollShadows() {
   document.querySelectorAll('.table-wrap').forEach(wrap => {

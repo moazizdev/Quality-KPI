@@ -8,7 +8,7 @@ let editingProdId = null;
 window.init_production = async function () {
   const content = document.getElementById('page-production');
   content.innerHTML = `
-    <div class="toolbar"><h3>${__('Production Records')}</h3><div class="btn-group"><button class="btn btn-primary" onclick="openProdForm()">+ ${__('Add Record')}</button><button class="btn btn-secondary" onclick="exportExcel('/production-records/export/excel')">${__('Export Excel')}</button></div></div>
+    <div class="toolbar"><h3>${__('Production Records')}</h3><input type="search" class="table-search" id="prod-search" placeholder="${__('Search')}..." oninput="filterTable('prod-tbody', this.value)"><div class="btn-group"><button class="btn btn-primary" onclick="openProdForm()">+ ${__('Add Record')}</button><button class="btn btn-secondary" onclick="exportExcel('/production-records/export/excel')">${__('Export Excel')}</button></div></div>
     <div class="card"><div class="table-wrap"><table><thead><tr><th>${__('ID')}</th><th>${__('Batch')}</th><th>${__('Date')}</th><th>${__('Time')}</th><th>${__('Shift')}</th><th>${__('Machine')}</th><th>${__('Product')}</th><th>${__('Pieces')}</th><th>${__('Actual Wt')}</th><th>${__('Actions')}</th></tr></thead><tbody id="prod-tbody"></tbody></table></div>
     <div class="pagination" id="prod-pagination"></div></div>
     <div class="modal-overlay" id="prod-modal"><div class="modal">

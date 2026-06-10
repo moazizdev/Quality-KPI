@@ -8,7 +8,7 @@ let editingDevId = null;
 window.init_deviations = async function () {
   const content = document.getElementById('page-deviations');
   content.innerHTML = `
-    <div class="toolbar"><h3>${__('Deviations')}</h3><div class="btn-group"><button class="btn btn-primary" onclick="openDevForm()">+ ${__('Add Deviation')}</button><button class="btn btn-secondary" onclick="exportExcel('/deviations/export/excel')">${__('Export Excel')}</button></div></div>
+    <div class="toolbar"><h3>${__('Deviations')}</h3><input type="search" class="table-search" id="dev-search" placeholder="${__('Search')}..." oninput="filterTable('dev-tbody', this.value)"><div class="btn-group"><button class="btn btn-primary" onclick="openDevForm()">+ ${__('Add Deviation')}</button><button class="btn btn-secondary" onclick="exportExcel('/deviations/export/excel')">${__('Export Excel')}</button></div></div>
     <div class="card"><div class="table-wrap"><table><thead><tr><th>${__('ID')}</th><th>${__('Date')}</th><th>${__('Time')}</th><th>${__('Machine')}</th><th>${__('Product')}</th><th>${__('Defect Category')}</th><th>${__('Qty')}</th><th>${__('Notes')}</th><th>${__('Actions')}</th></tr></thead><tbody id="dev-tbody"></tbody></table></div>
     <div class="pagination" id="dev-pagination"></div></div>
     <div class="modal-overlay" id="dev-modal"><div class="modal">

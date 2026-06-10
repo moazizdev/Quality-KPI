@@ -6,7 +6,7 @@ let totalRecords = 0;
 
 window.init_complaints = async function () {
   document.getElementById('page-complaints').innerHTML = `
-    <div class="toolbar"><h3>${__('Customer Complaints')}</h3><div class="btn-group"><button class="btn btn-primary" onclick="openComplaintForm()">+ ${__('Add Complaint')}</button><button class="btn btn-secondary" onclick="exportExcel('/complaints/export/excel')">${__('Export Excel')}</button></div></div>
+    <div class="toolbar"><h3>${__('Customer Complaints')}</h3><input type="search" class="table-search" id="complaint-search" placeholder="${__('Search')}..." oninput="filterTable('complaint-tbody', this.value)"><div class="btn-group"><button class="btn btn-primary" onclick="openComplaintForm()">+ ${__('Add Complaint')}</button><button class="btn btn-secondary" onclick="exportExcel('/complaints/export/excel')">${__('Export Excel')}</button></div></div>
     <div class="card"><div class="table-wrap"><table><thead><tr><th>${__('ID')}</th><th>${__('Number')}</th><th>${__('Customer')}</th><th>${__('Date')}</th><th>${__('Time')}</th><th>${__('Status')}</th><th>${__('Department')}</th><th>${__('Actions')}</th></tr></thead><tbody id="complaint-tbody"></tbody></table></div>
     <div class="pagination" id="complaint-pagination"></div></div>
     <div class="modal-overlay" id="complaint-modal"><div class="modal">
