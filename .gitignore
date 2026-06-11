@@ -39,3 +39,6 @@ config.ini
 
 # Self-signed SSL certs
 .certs/
+
+# Server logs
+server.log
