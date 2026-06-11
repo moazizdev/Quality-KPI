@@ -83,6 +83,17 @@ def get_deviation(
     return deviation
 
 
+@router.delete("/{deviation_id}", status_code=204)
+def delete_deviation(deviation_id: int, db: Session = Depends(get_db), admin_user: models.User = Depends(require_admin)):
+    deviation = db.query(models.Deviation).get(deviation_id)
+    if not deviation:
+        raise HTTPException(status_code=404, detail="Deviation not found")
+    log_action(db, admin_user, "DELETE", "deviation", deviation_id,
+               f"Deviation #{deviation_id}")
+    db.delete(deviation)
+    db.commit()
+
+
 @router.patch("/{deviation_id}", response_model=schemas.DeviationOut)
 def update_deviation(deviation_id: int, payload: schemas.DeviationUpdate, db: Session = Depends(get_db), admin_user: models.User = Depends(require_admin)):
     deviation = db.query(models.Deviation).get(deviation_id)

@@ -1,4 +1,5 @@
 @echo off
+chcp 65001 >nul
 title Quality KPI System — Installation
 cd /d "%~dp0"
 
