@@ -1,4 +1,4 @@
-import { listWithMeta, list, create, update, del } from '../api.js';
+import { listWithMeta, list, create, update, del, isAdmin } from '../api.js';
 import { makeSearchable } from '../searchable-select.js';
 
 let currentPage = 1;
@@ -10,7 +10,7 @@ window.init_production = async function () {
   const content = document.getElementById('page-production');
   content.innerHTML = `
     <div class="toolbar"><h3>${__('Production Records')}</h3><input type="search" class="table-search" id="prod-search" placeholder="${__('Search')}..." oninput="filterTable('prod-tbody', this.value)"><div class="btn-group"><button class="btn btn-primary" onclick="openProdForm()">+ ${__('Add Record')}</button><button class="btn btn-secondary" onclick="exportExcel('/production-records/export/excel')">${__('Export Excel')}</button></div></div>
-    <div class="card"><div class="table-wrap"><table><thead><tr><th>${__('ID')}</th><th>${__('Batch')}</th><th>${__('Date')}</th><th>${__('Time')}</th><th>${__('Shift')}</th><th>${__('Machine')}</th><th>${__('Product')}</th><th>${__('Pieces')}</th><th>${__('Actual Wt')}</th><th>${__('Actions')}</th></tr></thead><tbody id="prod-tbody"></tbody></table></div>
+    <div class="card"><div class="table-wrap"><table><thead><tr><th>${__('ID')}</th><th>${__('Batch')}</th><th>${__('Date')}</th><th>${__('Time')}</th><th>${__('Shift')}</th><th>${__('Machine')}</th><th>${__('Product')}</th>${isAdmin() ? `<th>${__('Pieces')}</th>` : ''}<th>${__('Actual Wt')}</th><th>${__('Actions')}</th></tr></thead><tbody id="prod-tbody"></tbody></table></div>
     <div class="pagination" id="prod-pagination"></div></div>
     <div class="modal-overlay" id="prod-modal"><div class="modal">
       <div class="modal-header"><span id="prod-modal-title">${__('Add Production Record')}</span><button class="close" onclick="closeProdForm()">&times;</button></div>
@@ -37,7 +37,7 @@ window.init_production = async function () {
         </div>
         <div class="form-row">
           <div class="form-group"><label>${__('Biscuit Weight')}${info('Weight of the biscuit/crunch component')}</label><input class="form-control" id="prod-biscuit" type="number" step="0.1"></div>
-          <div class="form-group"><label>${__('Pieces Produced')}${info('Total number of individual units produced')}</label><input class="form-control" id="prod-pieces" type="number" placeholder="${__('Total pieces made')}"></div>
+          ${isAdmin() ? `<div class="form-group"><label>${__('Pieces Produced')}${info('Total number of individual units produced')}</label><input class="form-control" id="prod-pieces" type="number" placeholder="${__('Total pieces made')}"></div>` : '<div class="form-group"></div>'}
         </div>
         <div class="form-row">
           <div class="form-group"><label>${__('Min / Max Weight')}${info('Acceptable weight range for quality control')}</label><div style="display:flex;gap:8px"><input class="form-control" id="prod-min" type="number" step="0.1" placeholder="${__('Min')}"><input class="form-control" id="prod-max" type="number" step="0.1" placeholder="${__('Max')}"></div></div>
@@ -60,7 +60,7 @@ async function loadProds() {
   const mMap = Object.fromEntries(machines.map(m => [m.id, m.machine_code]));
   const pMap = Object.fromEntries(products.map(p => [p.id, p.product_name_ar || p.product_name]));
   document.getElementById('prod-tbody').innerHTML = res.data.map(r => `
-    <tr><td>${r.id}</td><td>${r.batch_no}</td><td>${r.production_date}</td><td>${r.production_time || '-'}</td><td>${r.shift}</td><td>${mMap[r.machine_id] || r.machine_id}</td><td>${pMap[r.product_id] || r.product_id}</td><td>${r.pieces_produced || '-'}</td><td>${r.actual_weight || '-'}</td>
+    <tr><td>${r.id}</td><td>${r.batch_no}</td><td>${r.production_date}</td><td>${r.production_time || '-'}</td><td>${r.shift}</td><td>${mMap[r.machine_id] || r.machine_id}</td><td>${pMap[r.product_id] || r.product_id}</td>${isAdmin() ? `<td>${r.pieces_produced || '-'}</td>` : ''}<td>${r.actual_weight || '-'}</td>
     <td><div class="btn-group"><button class="btn btn-sm" onclick="editProd(${r.id})">${__('Edit')}</button><button class="btn btn-sm btn-danger" onclick="deleteProd(${r.id})">${__('Delete')}</button></div></td></tr>
   `).join('');
   renderPagination();
@@ -110,7 +110,7 @@ function fillProductDefaults(productId) {
   if (p.default_biscuit_weight) document.getElementById('prod-biscuit').value = p.default_biscuit_weight;
   if (p.default_min_weight) document.getElementById('prod-min').value = p.default_min_weight;
   if (p.default_max_weight) document.getElementById('prod-max').value = p.default_max_weight;
-  if (p.default_pieces) document.getElementById('prod-pieces').value = p.default_pieces;
+  if (isAdmin() && p.default_pieces) document.getElementById('prod-pieces').value = p.default_pieces;
 }
 
 window.editProd = async (id) => {
@@ -131,7 +131,8 @@ window.editProd = async (id) => {
   document.getElementById('prod-ice').value = r.ice_weight || '';
   document.getElementById('prod-sauce').value = r.sauce_weight || '';
   document.getElementById('prod-biscuit').value = r.biscuit_weight || '';
-  document.getElementById('prod-pieces').value = r.pieces_produced || '';
+  const piecesEl = document.getElementById('prod-pieces');
+  if (piecesEl) piecesEl.value = r.pieces_produced || '';
   document.getElementById('prod-min').value = r.min_weight || '';
   document.getElementById('prod-max').value = r.max_weight || '';
   document.getElementById('prod-modal').classList.add('active');
@@ -147,7 +148,8 @@ window.openProdForm = async () => {
   document.getElementById('prod-ice').value = '';
   document.getElementById('prod-sauce').value = '';
   document.getElementById('prod-biscuit').value = '';
-  document.getElementById('prod-pieces').value = '';
+  const piecesEl = document.getElementById('prod-pieces');
+  if (piecesEl) piecesEl.value = '';
   document.getElementById('prod-min').value = '';
   document.getElementById('prod-max').value = '';
   const [machines, products] = await Promise.all([list('/machines'), list('/products')]);
@@ -173,7 +175,7 @@ window.saveProd = async () => {
     ice_weight: parseFloat(document.getElementById('prod-ice').value) || null,
     sauce_weight: parseFloat(document.getElementById('prod-sauce').value) || null,
     biscuit_weight: parseFloat(document.getElementById('prod-biscuit').value) || null,
-    pieces_produced: parseInt(document.getElementById('prod-pieces').value) || null,
+    pieces_produced: (isAdmin() ? parseInt(document.getElementById('prod-pieces').value) : null) || null,
     min_weight: parseFloat(document.getElementById('prod-min').value) || null,
     max_weight: parseFloat(document.getElementById('prod-max').value) || null,
   };

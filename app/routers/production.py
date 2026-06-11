@@ -41,6 +41,9 @@ def list_records(
         q = q.filter(models.ProductionRecord.machine_id.in_(machine_ids))
     total = q.count()
     items = q.order_by(models.ProductionRecord.production_date.desc()).offset(skip).limit(limit).all()
+    if current_user.role != "admin":
+        for item in items:
+            item.pieces_produced = None
     response.headers["X-Total-Count"] = str(total)
     return items
 
@@ -55,6 +58,8 @@ def create_record(
         raise HTTPException(status_code=404, detail="Machine not found")
     if not db.query(models.Product).get(payload.product_id):
         raise HTTPException(status_code=404, detail="Product not found")
+    if current_user.role != "admin":
+        payload.pieces_produced = None
     machine_ids = get_engineer_machine_ids(current_user, db)
     if machine_ids is not None and payload.machine_id not in machine_ids:
         raise HTTPException(status_code=403, detail="Not your assigned machine")
@@ -80,6 +85,8 @@ def get_record(
     machine_ids = get_engineer_machine_ids(current_user, db)
     if machine_ids is not None and record.machine_id not in machine_ids:
         raise HTTPException(status_code=403, detail="Not your assigned machine")
+    if current_user.role != "admin":
+        record.pieces_produced = None
     return record
 
 
@@ -139,18 +146,24 @@ def export_production_excel(
     m_map = {m.id: m.machine_code for m in db.query(models.Machine).all()}
     p_map = {p.id: (p.product_name_ar or p.product_name) for p in db.query(models.Product).all()}
 
+    is_admin = current_user.role == "admin"
     rows = []
     for r in records:
-        rows.append([
+        row = [
             r.id, r.batch_no, r.production_date, r.production_time or "",
             r.shift, m_map.get(r.machine_id, ""), p_map.get(r.product_id, ""),
             r.ice_weight or "", r.sauce_weight or "", r.biscuit_weight or "",
             r.min_weight or "", r.actual_weight or "", r.max_weight or "",
-            r.pieces_produced or "",
-        ])
+        ]
+        if is_admin:
+            row.append(r.pieces_produced or "")
+        rows.append(row)
+    headers = ["ID", "Batch", "Date", "Time", "Shift", "Machine", "Product",
+               "Ice Wt", "Sauce Wt", "Biscuit Wt", "Min Wt", "Actual Wt", "Max Wt"]
+    if is_admin:
+        headers.append("Pieces")
     return build_excel(
         f"production_records_{date.today()}.xlsx",
-        ["ID", "Batch", "Date", "Time", "Shift", "Machine", "Product",
-         "Ice Wt", "Sauce Wt", "Biscuit Wt", "Min Wt", "Actual Wt", "Max Wt", "Pieces"],
+        headers,
         rows,
     )

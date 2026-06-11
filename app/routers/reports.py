@@ -193,6 +193,10 @@ def weekly_report(
     data = build_report_data(db, week_start)
     data.pop("ws", None)
     data.pop("we", None)
+    if current_user.role != "admin":
+        data.pop("total_pieces_produced", None)
+        for m in data.get("machines", []):
+            m.pop("total_pieces_produced", None)
     return data
 
 

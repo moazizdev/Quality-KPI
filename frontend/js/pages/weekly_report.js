@@ -1,4 +1,4 @@
-import { get } from '../api.js';
+import { get, isAdmin } from '../api.js';
 
 let currentWeekStart = null;
 let chartDept = null;
@@ -89,7 +89,7 @@ function renderReport(report, container) {
     <div class="kpi-grid" style="margin-bottom:20px">
       <div class="kpi-card primary"><div class="kpi-label">${__('Period')}</div><div class="kpi-value" style="font-size:16px">${week_start} – ${week_end}</div></div>
       <div class="kpi-card primary"><div class="kpi-label">${__('Production Records')}</div><div class="kpi-value">${total_production_records}</div></div>
-      <div class="kpi-card primary"><div class="kpi-label">${__('Pieces Produced')}</div><div class="kpi-value">${total_pieces_produced}</div></div>
+      ${isAdmin() ? `<div class="kpi-card primary"><div class="kpi-label">${__('Pieces Produced')}</div><div class="kpi-value">${total_pieces_produced}</div></div>` : ''}
       <div class="kpi-card danger"><div class="kpi-label">${__('Total Defect Qty')}</div><div class="kpi-value">${total_defect_quantity}</div></div>
       <div class="kpi-card warning"><div class="kpi-label">${__('Overall Defect Rate')}${info('(total defects ÷ total pieces) × 100')}</div><div class="kpi-value">${overall_defect_rate}%</div></div>
     </div>
@@ -117,7 +117,7 @@ function renderReport(report, container) {
   // ── Machine Reports ──────────────────────────────────────────────────
   machines.forEach(m => {
     html += `<div class="card" style="margin-bottom:16px">
-      <div class="card-header">${m.machine_code} — ${m.hall}  <span style="font-weight:400;font-size:13px;color:var(--text-muted)">${__('Pieces')}: ${m.total_pieces_produced} | ${__('Defects')}: ${m.total_defect_quantity} | ${__('Rate')}: ${m.overall_defect_rate}%</span></div>
+      <div class="card-header">${m.machine_code} — ${m.hall}  <span style="font-weight:400;font-size:13px;color:var(--text-muted)">${isAdmin() ? `${__('Pieces')}: ${m.total_pieces_produced} | ` : ''}${__('Defects')}: ${m.total_defect_quantity} | ${__('Rate')}: ${m.overall_defect_rate}%</span></div>
       <div class="card-body">
         <div class="table-wrap"><table>
           <thead><tr><th>${__('Defect Code')}</th><th>${__('Defect Name')}</th><th>${__('Quantity')}</th><th>${__('Rate %')}${info('(this defect qty ÷ total pieces on this machine) × 100')}</th></tr></thead>
