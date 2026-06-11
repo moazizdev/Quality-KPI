@@ -16,53 +16,6 @@ const BackupPage = {
   async loadInfo(el) {
     const res = await get('/backup/info');
     if (!res) {
-      el.innerHTML = `<div class="alert alert-error">${__('error')}: ${__('Failed to load dashboard')}</div>`;
-      return;
-    }
-
-    el.innerHTML = `
-      <div class="page-header">
-        <h1><i class="icon-database"></i> ${__('backup')}</h1>
-      </div>
-
-      <div class="card" style="margin-bottom:16px">
-        <h3>${__('database_location')}</h3>
-        <table class="info-table">
-          <tr><td>${__('path')}:</td><td><code>${res.path}</code></td></tr>
-          <tr><td>${__('size')}:</td><td>${res.size_mb} MB</td></tr>
-          <tr><td>${__('status')}:</td><td>${res.exists ? '✅ ' + __('available') : '❌ ' + __('not_found')}</td></tr>
-        </table>
-      </div>
-
-      <div class="card" style="margin-bottom:16px">
-        <h3>${__('backup_actions')}</h3>
-        <div class="btn-group" style="display:flex;gap:8px;flex-wrap:wrap">
-          <button class="btn btn-primary" id="btn-download-backup">
-            ⬇ ${__('download_backup')}
-          </button>
-          <button class="btn btn-secondary" id="btn-copy-backup">
-            📁 ${__('create_backup_copy')}
-          </button>
-        </div>
-        <div id="backup-result" style="margin-top:8px"></div>
-      </div>
-
-      ${res.backups && res.backups.length > 0 ? `
-      <div class="card">
-        <h3>${__('existing_backups')}</h3>
-        <ul style="list-style:none;padding:0">
-          ${res.backups.map(b => `<li style="padding:4px 0;border-bottom:1px solid #eee"><code>${b}</code></li>`).join('')}
-        </ul>
-      </div>` : ''}
-    `;
-
-    document.getElementById('btn-download-backup').onclick = () => this.downloadBackup();
-    document.getElementById('btn-copy-backup').onclick = () => this.createCopy();
-  },
-
-  async loadInfo(el) {
-    const res = await get('/backup/info');
-    if (!res) {
       el.innerHTML = `<div class="alert alert-error">${__('network_error')}</div>`;
       return;
     }
@@ -74,16 +27,18 @@ const BackupPage = {
 
       <div class="card" style="margin-bottom:16px">
         <h3>${__('database_location')}</h3>
-        <table class="info-table">
-          <tr><td>${__('path')}:</td><td><code>${res.path}</code></td></tr>
-          <tr><td>${__('size')}:</td><td>${res.size_mb} MB</td></tr>
-          <tr><td>${__('status')}:</td><td>${res.exists ? '✅ ' + __('available') : '❌ ' + __('not_found')}</td></tr>
-        </table>
+        <div class="table-wrap">
+          <table class="info-table">
+            <tr><td>${__('path')}:</td><td><code style="word-break:break-all">${res.path}</code></td></tr>
+            <tr><td>${__('size')}:</td><td>${res.size_mb} MB</td></tr>
+            <tr><td>${__('status')}:</td><td>${res.exists ? '✅ ' + __('available') : '❌ ' + __('not_found')}</td></tr>
+          </table>
+        </div>
       </div>
 
       <div class="card" style="margin-bottom:16px">
         <h3>${__('backup_actions')}</h3>
-        <div class="btn-group" style="display:flex;gap:8px;flex-wrap:wrap">
+        <div class="btn-group backup-actions">
           <button class="btn btn-primary" id="btn-download-backup">
             ⬇ ${__('download_backup')}
           </button>
@@ -97,8 +52,8 @@ const BackupPage = {
       ${res.backups && res.backups.length > 0 ? `
       <div class="card">
         <h3>${__('existing_backups')}</h3>
-        <ul style="list-style:none;padding:0">
-          ${res.backups.map(b => `<li style="padding:4px 0;border-bottom:1px solid #eee"><code>${b}</code></li>`).join('')}
+        <ul class="backup-file-list">
+          ${res.backups.map(b => `<li><code style="word-break:break-all">${b}</code></li>`).join('')}
         </ul>
       </div>` : ''}
     `;
