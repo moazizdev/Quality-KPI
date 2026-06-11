@@ -1,4 +1,5 @@
 import { listWithMeta, list, get, create, update, del } from '../api.js';
+import { makeSearchable } from '../searchable-select.js';
 
 let currentPage = 1;
 let perPage = 25;
@@ -96,6 +97,7 @@ window.openCapaForm = async (data) => {
   const deviations = await list('/deviations');
   const sel = document.getElementById('capa-deviation');
   sel.innerHTML = deviations.map(d => `<option value="${d.id}" ${data && d.id === data.deviation_id ? 'selected' : ''}>#${d.id} - ${d.date}</option>`).join('');
+  makeSearchable('capa-deviation');
   document.getElementById('capa-modal').classList.add('active');
 };
 

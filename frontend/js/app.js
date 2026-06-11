@@ -14,6 +14,8 @@ import './pages/weekly_report.js';
 import './pages/backup.js';
 import './pages/audit.js';
 import './pages/departments.js';
+import './pages/license.js';
+import './pages/system.js';
 
 // ─── Navigation Definition ───────────────────────────────────────────────────
 const NAV_ITEMS = [
@@ -35,6 +37,7 @@ const NAV_ITEMS = [
   { page: 'weekly-report', label: 'Weekly Report', icon: '&#128202;' },
   { page: 'backup', label: 'Backup', icon: '&#128190;', admin: true },
   { page: 'audit-logs', label: 'Audit Logs', icon: '&#128214;', admin: true },
+  { page: 'system', label: 'System', icon: '&#9881;', admin: true },
 ];
 
 function getCurrentUser() {
@@ -96,6 +99,8 @@ const pageNames = {
   'weekly-report': 'Weekly Report',
   backup: 'Database Backup',
   'audit-logs': 'Audit Logs',
+  system: 'System',
+  license: 'License Activation',
 };
 
 // ─── Language Switch ─────────────────────────────────────────────────────────
@@ -142,7 +147,7 @@ function hideLoader() {
   document.getElementById('page-loader').classList.remove('active');
 }
 
-const ADMIN_PAGES = ['halls', 'machines', 'products', 'defect-categories', 'departments', 'users', 'backup', 'audit-logs'];
+const ADMIN_PAGES = ['halls', 'machines', 'products', 'defect-categories', 'departments', 'users', 'backup', 'audit-logs', 'system'];
 
 function navigate(pageId) {
   const user = getCurrentUser();
@@ -246,6 +251,16 @@ const loginErrText = { en: 'Session expired. Please login again.', ar: 'انته
 window.showAuthRequired = function () {
   alert(getLang() === 'ar' ? loginErrText.ar : loginErrText.en);
   window.authLogout();
+};
+
+window.showLicenseRequired = function () {
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('login-overlay').classList.remove('active');
+  const licensePage = document.getElementById('page-license');
+  if (licensePage) {
+    licensePage.classList.add('active');
+    if (window.init_license) window.init_license();
+  }
 };
 
 function updateUserUI() {

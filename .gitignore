@@ -42,3 +42,9 @@ config.ini
 
 # Server logs
 server.log
+
+# License activation file (machine-specific)
+license.key
+
+# FUSE hidden files (Linux mount artifacts)
+.fuse_hidden*

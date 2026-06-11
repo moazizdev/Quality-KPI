@@ -1,4 +1,5 @@
 import { listWithMeta, list, create, update, del } from '../api.js';
+import { makeSearchable } from '../searchable-select.js';
 
 let currentPage = 1;
 let perPage = 25;
@@ -99,6 +100,7 @@ window.editDev = async (id) => {
   document.getElementById('dev-machine').innerHTML = machines.map(m => `<option value="${m.id}" ${m.id === d.machine_id ? 'selected' : ''}>${m.machine_code} - ${m.machine_name}</option>`).join('');
   document.getElementById('dev-product').innerHTML = products.map(p => `<option value="${p.id}" ${p.id === d.product_id ? 'selected' : ''}>${p.product_name_ar || p.product_name}</option>`).join('');
   document.getElementById('dev-defect').innerHTML = defects.map(dc => `<option value="${dc.id}" ${dc.id === d.defect_category_id ? 'selected' : ''}>[${dc.defect_code}] ${dc.defect_name}</option>`).join('');
+  makeSearchable('dev-machine'); makeSearchable('dev-product'); makeSearchable('dev-defect');
   document.getElementById('dev-date').value = d.date;
   document.getElementById('dev-time').value = d.deviation_time || '';
   document.getElementById('dev-qty').value = d.quantity;
@@ -119,6 +121,7 @@ window.openDevForm = async () => {
   document.getElementById('dev-machine').innerHTML = machines.map(m => `<option value="${m.id}">${m.machine_code} - ${m.machine_name}</option>`).join('');
   document.getElementById('dev-product').innerHTML = products.map(p => `<option value="${p.id}">${p.product_name_ar || p.product_name}</option>`).join('');
   document.getElementById('dev-defect').innerHTML = defects.map(d => `<option value="${d.id}">[${d.defect_code}] ${d.defect_name}</option>`).join('');
+  makeSearchable('dev-machine'); makeSearchable('dev-product'); makeSearchable('dev-defect');
   document.getElementById('dev-modal').classList.add('active');
 };
 

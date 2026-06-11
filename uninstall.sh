@@ -73,12 +73,17 @@ if [ "$DELETED" -eq 0 ]; then
   echo -e "  ${GREEN}✓${NC} No virtual environment found"
 fi
 
-echo -e "${YELLOW}[4/5] Cleaning Python cache...${NC}"
+echo -e "${YELLOW}[4/6] Cleaning generated files...${NC}"
+rm -f license.key
+rm -rf .certs
+echo -e "  ${GREEN}✓${NC} License and certificate files removed"
+
+echo -e "${YELLOW}[5/6] Cleaning Python cache...${NC}"
 find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
 find . -type f \( -name "*.pyc" -o -name "*.pyo" \) -delete 2>/dev/null || true
 echo -e "  ${GREEN}✓${NC} Temporary files cleaned"
 
-echo -e "${YELLOW}[5/5] Removing uninstaller...${NC}"
+echo -e "${YELLOW}[6/6] Removing uninstaller...${NC}"
 rm -f uninstall.sh
 echo -e "  ${GREEN}✓${NC} Done"
 echo ""

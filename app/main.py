@@ -1,11 +1,12 @@
 from pathlib import Path
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from starlette.responses import FileResponse
+from starlette.responses import FileResponse, JSONResponse
 from sqlalchemy import inspect, text
 
 from app.database import engine, Base
-from app.routers import halls, machines, products, production, deviations, capa, complaints, kpi, auth, reports, backup, audit, departments
+from app.license import is_activated, get_machine_fingerprint
+from app.routers import halls, machines, products, production, deviations, capa, complaints, kpi, auth, reports, backup, audit, departments, license, system
 
 # ─── Migration helpers (minimise DB round-trips for remote databases) ──────
 
@@ -72,7 +73,26 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# ─── License Middleware ──────────────────────────────────────────────────────────
+
+SKIP_LICENSE_PREFIXES = {"/license", "/auth/", "/js/", "/css/", "/icons/", "/favicon", "/manifest.json", "/sw.js"}
+
+
+@app.middleware("http")
+async def license_middleware(request: Request, call_next):
+    path = request.url.path
+    if path == "/" or any(path.startswith(p) for p in SKIP_LICENSE_PREFIXES):
+        return await call_next(request)
+    if not is_activated():
+        return JSONResponse(
+            status_code=402,
+            content={"detail": "License required", "fingerprint": get_machine_fingerprint()},
+        )
+    return await call_next(request)
+
+
 # ─── Register Routers ────────────────────────────────────────────────────────
+app.include_router(license.router)
 app.include_router(auth.router)
 app.include_router(halls.router)
 app.include_router(machines.router)
@@ -87,6 +107,7 @@ app.include_router(reports.router)
 app.include_router(backup.router)
 app.include_router(departments.router)
 app.include_router(audit.router)
+app.include_router(system.router)
 
 
 # ─── Serve Frontend SPA ───────────────────────────────────────────────────────

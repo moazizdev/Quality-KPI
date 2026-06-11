@@ -27,6 +27,10 @@ export async function api(method, path, body) {
   if (TOKEN) opts.headers['Authorization'] = `Bearer ${TOKEN}`;
   if (body) opts.body = JSON.stringify(body);
   const res = await fetch(path, opts);
+  if (res.status === 402) {
+    window.showLicenseRequired();
+    return null;
+  }
   if (res.status === 401) {
     clearAuth();
     window.location.hash = '#/login';
@@ -51,6 +55,10 @@ export async function listWithMeta(path) {
   const opts = { method: 'GET', headers: { 'Content-Type': 'application/json' } };
   if (TOKEN) opts.headers['Authorization'] = `Bearer ${TOKEN}`;
   const res = await fetch(path, opts);
+  if (res.status === 402) {
+    window.showLicenseRequired();
+    return { data: [], total: 0 };
+  }
   if (res.status === 401) {
     clearAuth();
     window.location.hash = '#/login';

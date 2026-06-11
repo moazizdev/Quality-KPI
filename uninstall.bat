@@ -95,12 +95,26 @@ if "!VENV_DELETED!"=="0" (
     echo   [OK] No virtual environment found
 )
 
-echo [4/5] Cleaning temporary files...
+echo [4/6] Cleaning generated files...
+if exist "license.key" (
+    del /f /q "license.key" >nul 2>&1
+    echo   [OK] License key removed
+) else (
+    echo   [OK] No license key found
+)
+if exist ".certs" (
+    rmdir /s /q ".certs" >nul 2>&1
+    echo   [OK] Certificate files removed
+) else (
+    echo   [OK] No certificate files found
+)
+
+echo [5/6] Cleaning temporary files...
 for /d /r . %%d in (__pycache__) do if exist "%%d" rmdir /s /q "%%d" >nul 2>&1
 del /s /f /q *.pyc *.pyo >nul 2>&1
 echo   [OK] Temporary files cleaned
 
-echo [5/5] Removing uninstaller...
+echo [6/6] Removing uninstaller...
 del /f /q "uninstall.bat" >nul 2>&1
 echo   [OK] Done
 
@@ -113,6 +127,6 @@ echo.
 echo  Your files are still here:
 echo    %CD%
 echo.
-echo  To reinstall, run: setup.bat
+echo  To reinstall, run: install.bat
 echo.
 pause

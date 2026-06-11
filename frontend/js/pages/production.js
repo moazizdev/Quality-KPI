@@ -1,4 +1,5 @@
 import { listWithMeta, list, create, update, del } from '../api.js';
+import { makeSearchable } from '../searchable-select.js';
 
 let currentPage = 1;
 let perPage = 25;
@@ -120,6 +121,7 @@ window.editProd = async (id) => {
   window._prodProducts = products;
   document.getElementById('prod-machine').innerHTML = machines.map(m => `<option value="${m.id}" ${m.id === r.machine_id ? 'selected' : ''}>${m.machine_code} - ${m.machine_name}</option>`).join('');
   document.getElementById('prod-product').innerHTML = products.map(p => `<option value="${p.id}" ${p.id === r.product_id ? 'selected' : ''}>${p.product_name_ar || p.product_name}</option>`).join('');
+  makeSearchable('prod-machine'); makeSearchable('prod-product');
   document.getElementById('prod-product').onchange = function () { fillProductDefaults(parseInt(this.value)); };
   document.getElementById('prod-batch').value = r.batch_no;
   document.getElementById('prod-date').value = r.production_date;
@@ -152,6 +154,7 @@ window.openProdForm = async () => {
   window._prodProducts = products;
   document.getElementById('prod-machine').innerHTML = machines.map(m => `<option value="${m.id}">${m.machine_code} - ${m.machine_name}</option>`).join('');
   document.getElementById('prod-product').innerHTML = products.map(p => `<option value="${p.id}">${p.product_name_ar || p.product_name}</option>`).join('');
+  makeSearchable('prod-machine'); makeSearchable('prod-product');
   document.getElementById('prod-product').onchange = null;
   document.getElementById('prod-modal').classList.add('active');
 };
