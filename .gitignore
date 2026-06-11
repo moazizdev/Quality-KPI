@@ -36,3 +36,6 @@ Desktop.ini
 
 # Config (user-specific)
 config.ini
+
+# Self-signed SSL certs
+.certs/
