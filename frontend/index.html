@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#1e293b">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="manifest" href="manifest.json">
+<link rel="manifest" href="/manifest.json">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
 <title>نظام مؤشرات الجودة</title>
 <link rel="stylesheet" href="css/styles.css">
@@ -73,8 +73,23 @@
 <div id="sidebar-backdrop"></div>
 <script type="module" src="js/app.js"></script>
 <script>
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  setTimeout(() => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(() => { deferredPrompt = null; });
+    }
+  }, 30000);
+});
+window.addEventListener('appinstalled', () => {
+  deferredPrompt = null;
+  console.log('PWA installed');
+});
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js').catch(function() {});
+  navigator.serviceWorker.register('/sw.js').catch((err) => console.warn('SW registration failed:', err));
 }
 </script>
 </body>
