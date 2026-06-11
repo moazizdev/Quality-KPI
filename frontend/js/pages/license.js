@@ -17,24 +17,6 @@ const LicensePage = {
       return;
     }
 
-    if (!status.secret_configured) {
-      el.innerHTML = `
-        <div id="license-container">
-          <div id="license-box">
-            <div class="license-icon">🔐</div>
-            <h1>${__('Quality KPI System')}</h1>
-            <p class="license-sub">${__('License not configured')}</p>
-            <p>${__('The license secret is not set in config.ini. Please add a [license] section with your secret key.')}</p>
-            <div class="license-fingerprint">
-              <label>${__('Machine Fingerprint')}:</label>
-              <code>${status.fingerprint}</code>
-            </div>
-          </div>
-        </div>
-      `;
-      return;
-    }
-
     el.innerHTML = `
       <div id="license-container">
         <div id="license-box">

@@ -283,7 +283,6 @@ const translations = {
   'Activated successfully': { en: 'Activated successfully', ar: 'تم التفعيل بنجاح' },
   'Activation failed': { en: 'Activation failed', ar: 'فشل التفعيل' },
   'Please enter a license key': { en: 'Please enter a license key', ar: 'الرجاء إدخال مفتاح الترخيص' },
-  'License not configured': { en: 'License not configured', ar: 'الترخيص غير مهيأ' },
   'System': { en: 'System', ar: 'النظام' },
   'System Update': { en: 'System Update', ar: 'تحديث النظام' },
   'Current Version': { en: 'Current Version', ar: 'الإصدار الحالي' },

@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
-from app.license import is_activated, activate, get_machine_fingerprint, _get_secret
+from app.license import is_activated, activate, get_machine_fingerprint
 
 router = APIRouter(prefix="/license", tags=["License"])
 
@@ -15,7 +15,6 @@ def license_status():
     return {
         "activated": is_activated(),
         "fingerprint": get_machine_fingerprint(),
-        "secret_configured": _get_secret() is not None,
     }
 
 

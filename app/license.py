@@ -2,21 +2,14 @@ import hashlib
 import hmac
 import os
 import socket
-from configparser import ConfigParser
 from pathlib import Path
 
-CONFIG_FILE = Path(__file__).resolve().parent.parent / "config.ini"
 LICENSE_FILE = Path(__file__).resolve().parent.parent / "license.key"
+_LICENSE_SECRET = "dc6d7f04eec8cc228bc881dabfab4767204f7c7274e6ece7481f60a56fc7afec"
 
 
 def _get_secret():
-    cfg = ConfigParser()
-    cfg.read(str(CONFIG_FILE))
-    if cfg.has_option("license", "secret"):
-        val = cfg.get("license", "secret").strip()
-        if val:
-            return val
-    return None
+    return _LICENSE_SECRET
 
 
 def get_machine_fingerprint():
@@ -68,7 +61,7 @@ def is_activated():
 def activate(license_key):
     secret = _get_secret()
     if not secret:
-        return False, "License secret not configured in config.ini"
+        return False, "License system not initialized"
     if not license_key:
         return False, "License key is required"
     fp = get_machine_fingerprint()
