@@ -1,7 +1,10 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
-from app.license import is_activated, activate, get_machine_fingerprint
+import time
+from datetime import datetime, timezone
+
+from app.license import is_activated, activate, get_machine_fingerprint, get_license_expiry
 
 router = APIRouter(prefix="/license", tags=["License"])
 
@@ -12,9 +15,13 @@ class ActivateRequest(BaseModel):
 
 @router.get("/status")
 def license_status():
+    expiry_ts = get_license_expiry()
+    now = int(time.time())
     return {
         "activated": is_activated(),
         "fingerprint": get_machine_fingerprint(),
+        "expires_at": datetime.fromtimestamp(expiry_ts, tz=timezone.utc).isoformat() if expiry_ts else None,
+        "days_remaining": max(0, (expiry_ts - now) // 86400) if expiry_ts else None,
     }
 
 

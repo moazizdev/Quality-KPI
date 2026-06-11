@@ -2,10 +2,13 @@ import hashlib
 import hmac
 import os
 import socket
+import time
+from datetime import datetime, timezone
 from pathlib import Path
 
 LICENSE_FILE = Path(__file__).resolve().parent.parent / "license.key"
 _LICENSE_SECRET = "dc6d7f04eec8cc228bc881dabfab4767204f7c7274e6ece7481f60a56fc7afec"
+_DEFAULT_EXPIRY_DAYS = 30
 
 
 def _get_secret():
@@ -35,14 +38,47 @@ def get_machine_fingerprint():
     return hashlib.sha256(raw.encode()).hexdigest()
 
 
-def _generate_license(machine_fingerprint, secret):
-    h = hmac.new(secret.encode(), machine_fingerprint.encode(), hashlib.sha256)
-    return h.hexdigest()
+def _generate_license(machine_fingerprint, secret, expiry_days=None):
+    if expiry_days is None:
+        expiry_days = _DEFAULT_EXPIRY_DAYS
+    expiry_ts = int(time.time()) + expiry_days * 86400
+    data = f"{machine_fingerprint}|{expiry_ts}"
+    signature = hmac.new(secret.encode(), data.encode(), hashlib.sha256).hexdigest()
+    return f"{expiry_ts}:{signature}"
 
 
 def _validate_license(license_key, machine_fingerprint, secret):
-    expected = _generate_license(machine_fingerprint, secret)
+    if ":" in license_key:
+        parts = license_key.split(":", 1)
+        if len(parts) != 2:
+            return False
+        expiry_ts_str, signature = parts
+        try:
+            expiry_ts = int(expiry_ts_str)
+        except ValueError:
+            return False
+        if time.time() > expiry_ts:
+            return False
+        data = f"{machine_fingerprint}|{expiry_ts}"
+        expected = hmac.new(secret.encode(), data.encode(), hashlib.sha256).hexdigest()
+        return hmac.compare_digest(signature, expected)
+    expected = hmac.new(secret.encode(), machine_fingerprint.encode(), hashlib.sha256).hexdigest()
     return hmac.compare_digest(license_key, expected)
+
+
+def get_license_expiry():
+    if not LICENSE_FILE.exists():
+        return None
+    stored = LICENSE_FILE.read_text().strip()
+    if ":" not in stored:
+        return None
+    parts = stored.split(":", 1)
+    if len(parts) != 2:
+        return None
+    try:
+        return int(parts[0])
+    except ValueError:
+        return None
 
 
 def is_activated():

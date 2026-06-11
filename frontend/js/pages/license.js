@@ -17,12 +17,15 @@ const LicensePage = {
       return;
     }
 
+    const isExpired = status.expires_at && status.days_remaining === 0;
+
     el.innerHTML = `
       <div id="license-container">
         <div id="license-box">
-          <div class="license-icon">🔑</div>
+          <div class="license-icon">${isExpired ? '⏰' : '🔑'}</div>
           <h1>${__('Quality KPI System')}</h1>
-          <p class="license-sub">${__('This system is not activated')}</p>
+          <p class="license-sub">${isExpired ? __('License expired') : __('This system is not activated')}</p>
+          ${isExpired ? `<p>${__('Your license expired on')} ${new Date(status.expires_at).toLocaleDateString()}</p>` : ''}
           <p>${__('Enter your license key to activate:')}</p>
           <div class="license-fingerprint">
             <label>${__('Machine Fingerprint')}:</label>

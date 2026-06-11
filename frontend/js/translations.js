@@ -277,6 +277,8 @@ const translations = {
   'Search': { en: 'Search', ar: 'بحث' },
   'No results': { en: 'No results', ar: 'لا توجد نتائج' },
   'This system is not activated': { en: 'This system is not activated', ar: 'هذا النظام غير مفعل' },
+  'License expired': { en: 'License expired', ar: 'انتهت صلاحية الترخيص' },
+  'Your license expired on': { en: 'Your license expired on', ar: 'انتهت صلاحية ترخيصك في' },
   'License key': { en: 'License key', ar: 'مفتاح الترخيص' },
   'Machine Fingerprint': { en: 'Machine Fingerprint', ar: 'بصمة الجهاز' },
   'Activate': { en: 'Activate', ar: 'تفعيل' },
