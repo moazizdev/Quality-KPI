@@ -216,6 +216,7 @@ window.authLogin = async function () {
     const data = await res.json();
     setAuth(data.access_token, data.user);
     updateUserUI();
+    buildNav();
     if (!location.hash) location.hash = '#/dashboard';
     handleHash();
   } catch (e) {
@@ -233,6 +234,7 @@ document.getElementById('login-password').addEventListener('keydown', (e) => {
 
 window.authLogout = function () {
   clearAuth();
+  buildNav();
   document.getElementById('app').style.display = 'none';
   document.getElementById('login-overlay').classList.add('active');
   document.getElementById('login-username').value = '';
