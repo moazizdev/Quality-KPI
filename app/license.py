@@ -38,10 +38,11 @@ def get_machine_fingerprint():
     return hashlib.sha256(raw.encode()).hexdigest()
 
 
-def _generate_license(machine_fingerprint, secret, expiry_days=None):
-    if expiry_days is None:
-        expiry_days = _DEFAULT_EXPIRY_DAYS
-    expiry_ts = int(time.time()) + expiry_days * 86400
+def _generate_license(machine_fingerprint, secret, expiry_days=None, expiry_ts=None):
+    if expiry_ts is None:
+        if expiry_days is None:
+            expiry_days = _DEFAULT_EXPIRY_DAYS
+        expiry_ts = int(time.time()) + expiry_days * 86400
     data = f"{machine_fingerprint}|{expiry_ts}"
     signature = hmac.new(secret.encode(), data.encode(), hashlib.sha256).hexdigest()
     return f"{expiry_ts}:{signature}"
