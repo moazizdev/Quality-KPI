@@ -270,3 +270,9 @@ select.form-control{appearance:auto}
   [dir="rtl"] #sidebar.collapsed.open{transform:translateX(0)}
   [dir="rtl"] #toast-container{left:12px;right:auto}
 }
+
+/* ─── License Expiry Banner ───────────────────────────────────────────────── */
+.license-banner{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:6px;font-size:13px;margin-bottom:16px}
+.license-banner-info{background:#e8f4fd;color:#1a73e8;border:1px solid #b3d9f2}
+.license-banner-warning{background:#fff8e1;color:#f57f17;border:1px solid #ffe082}
+.license-banner-danger{background:#fdecea;color:#d32f2f;border:1px solid #f5c6cb}
