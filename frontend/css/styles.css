@@ -131,7 +131,7 @@ select.form-control{appearance:auto}
 /* ─── Responsive: Large Desktop ──────────────────────────────────────────── */
 @media(min-width:1200px){
   #sidebar{width:280px}
-  #content{padding:32px;max-width:1400px;margin:0 auto;width:100%}
+  #content{padding:32px;width:100%}
   .kpi-grid{grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px}
   .kpi-card{padding:24px}
   .kpi-card .kpi-value{font-size:32px}
