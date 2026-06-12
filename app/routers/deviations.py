@@ -88,6 +88,12 @@ def delete_deviation(deviation_id: int, db: Session = Depends(get_db), admin_use
     deviation = db.query(models.Deviation).get(deviation_id)
     if not deviation:
         raise HTTPException(status_code=404, detail="Deviation not found")
+    related_capa = db.query(models.CAPACase).filter_by(deviation_id=deviation_id).count()
+    if related_capa > 0:
+        raise HTTPException(
+            status_code=409,
+            detail=f"Cannot delete: {related_capa} CAPA case(s) reference this deviation. Delete them first.",
+        )
     log_action(db, admin_user, "DELETE", "deviation", deviation_id,
                f"Deviation #{deviation_id}")
     db.delete(deviation)
