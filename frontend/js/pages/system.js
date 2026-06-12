@@ -1,4 +1,4 @@
-import { get } from '../api.js';
+import { get, getToken } from '../api.js';
 
 const SystemPage = {
   async render() {
@@ -23,7 +23,7 @@ const SystemPage = {
           </div>
           <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap">
             <button class="btn btn-primary" id="btn-check-updates">${__('Check for Updates')}</button>
-            <button class="btn btn-success" id="btn-update" disabled>${__('Update & Restart')}</button>
+            <button class="btn btn-success" id="btn-update">${__('Update & Restart')}</button>
           </div>
           <div id="sys-msg" style="margin-top:12px"></div>
         </div>
@@ -69,9 +69,11 @@ const SystemPage = {
 
   async checkUpdates() {
     const infoEl = document.getElementById('sys-version-info');
-    const btnUpdate = document.getElementById('btn-update');
+    const btnCheck = document.getElementById('btn-check-updates');
     const msgEl = document.getElementById('sys-msg');
     msgEl.innerHTML = '';
+    btnCheck.disabled = true;
+    btnCheck.textContent = '⏳ ' + __('Checking...');
 
     try {
       const ver = await get('/system/version');
@@ -83,10 +85,11 @@ const SystemPage = {
           <tr><td>${__('Status')}:</td><td>${ver.up_to_date ? '✅ ' + __('Up to date') : '⚠️ ' + __('Update available')}</td></tr>
         </table>
       `;
-      btnUpdate.disabled = ver.up_to_date;
     } catch {
       infoEl.innerHTML = `<div class="alert alert-error">${__('Failed to check for updates')}</div>`;
     }
+    btnCheck.disabled = false;
+    btnCheck.textContent = __('Check for Updates');
   },
 
   async doUpdate() {
@@ -101,7 +104,7 @@ const SystemPage = {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token') || sessionStorage.getItem('token')}`,
+          'Authorization': `Bearer ${getToken()}`,
         },
       });
       const data = await res.json();

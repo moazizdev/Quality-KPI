@@ -298,6 +298,7 @@ const translations = {
   'Current Version': { en: 'Current Version', ar: 'الإصدار الحالي' },
   'Latest Version': { en: 'Latest Version', ar: 'آخر إصدار' },
   'Check for Updates': { en: 'Check for Updates', ar: 'التحقق من التحديثات' },
+  'Checking...': { en: 'Checking...', ar: 'جاري التحقق...' },
   'Update & Restart': { en: 'Update & Restart', ar: 'تحديث وإعادة تشغيل' },
   'Update available': { en: 'Update available', ar: 'تحديث متاح' },
   'Up to date': { en: 'Up to date', ar: 'محدث' },
