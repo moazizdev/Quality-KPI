@@ -10,6 +10,12 @@ const SystemPage = {
         <h1><i class="icon-database"></i> ${__('System')}</h1>
       </div>
       <div class="card" style="margin-bottom:16px">
+        <div class="card-header">${__('License')}</div>
+        <div class="card-body" id="sys-license-info">
+          <div class="loading">${__('Loading...')}</div>
+        </div>
+      </div>
+      <div class="card" style="margin-bottom:16px">
         <div class="card-header">${__('System Update')}</div>
         <div class="card-body">
           <div id="sys-version-info">
@@ -27,7 +33,38 @@ const SystemPage = {
     document.getElementById('btn-check-updates').onclick = () => this.checkUpdates();
     document.getElementById('btn-update').onclick = () => this.doUpdate();
 
+    this.loadLicenseInfo();
     this.checkUpdates();
+  },
+
+  async loadLicenseInfo() {
+    const el = document.getElementById('sys-license-info');
+    try {
+      const res = await fetch('/license/status');
+      const status = await res.json();
+      if (!status.activated) {
+        el.innerHTML = `<div class="alert alert-error">❌ ${__('This system is not activated')}</div>`;
+        return;
+      }
+      if (status.days_remaining === null) {
+        el.innerHTML = `<div class="license-banner license-banner-info">ℹ️ ${__('License')}: ${__('no expiry')}</div>`;
+        return;
+      }
+      let cls = 'license-banner-info';
+      let icon = 'ℹ️';
+      if (status.days_remaining <= 7) { cls = 'license-banner-danger'; icon = '⏰'; }
+      else if (status.days_remaining <= 14) { cls = 'license-banner-warning'; icon = '⚠️'; }
+      el.innerHTML = `
+        <div class="license-banner ${cls}" style="margin-bottom:12px">${icon} ${__('License expires in')} <strong>${status.days_remaining}</strong> ${__('days')} (${new Date(status.expires_at).toLocaleDateString()})</div>
+        <table class="info-table">
+          <tr><td>${__('Status')}:</td><td>✅ ${__('Activated')}</td></tr>
+          <tr><td>${__('Expires')}:</td><td>${new Date(status.expires_at).toLocaleDateString()}</td></tr>
+          <tr><td>${__('Days remaining')}:</td><td><strong>${status.days_remaining}</strong></td></tr>
+        </table>
+      `;
+    } catch {
+      el.innerHTML = `<div class="alert alert-error">❌ ${__('Failed to load license info')}</div>`;
+    }
   },
 
   async checkUpdates() {

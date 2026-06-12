@@ -66,26 +66,6 @@ window.init_dashboard = async function () {
     if (dateFrom) params.date_from = dateFrom;
     if (dateTo) params.date_to = dateTo;
 
-    // License expiry banner
-    const oldBanner = document.querySelector('.license-banner');
-    if (oldBanner) oldBanner.remove();
-    const licRes = await fetch('/license/status');
-    const licStatus = await licRes.json();
-    if (licStatus.activated && licStatus.days_remaining !== null) {
-      let bannerClass = 'license-banner-info';
-      let bannerIcon = 'ℹ️';
-      if (licStatus.days_remaining <= 7) {
-        bannerClass = 'license-banner-danger';
-        bannerIcon = '⏰';
-      } else if (licStatus.days_remaining <= 14) {
-        bannerClass = 'license-banner-warning';
-        bannerIcon = '⚠️';
-      }
-      document.getElementById('kpi-grid').insertAdjacentHTML('beforebegin',
-        `<div class="license-banner ${bannerClass}">${bannerIcon} ${__('License expires in')} <strong>${licStatus.days_remaining}</strong> ${__('days')} (${new Date(licStatus.expires_at).toLocaleDateString()})</div>`
-      );
-    }
-
     const summary = await loadKpiSummary(params);
     document.getElementById('kpi-grid').innerHTML = `
       <div class="kpi-card primary"><div class="kpi-label">${__('Production Records')}</div><div class="kpi-value">${summary.total_production_records}</div></div>
