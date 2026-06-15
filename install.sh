@@ -41,7 +41,7 @@ echo -e "  ${GREEN}✓${NC} Dependencies installed"
 # ── Database ──
 echo -e "${YELLOW}[3/4] Setting up database...${NC}"
 if [ ! -f quality_kpi.db ]; then
-    python seed_dev.py
+    python3 seed_dev.py
     echo -e "  ${GREEN}✓${NC} Database created with sample data"
 else
     echo -e "  ${GREEN}✓${NC} Database already exists"
@@ -61,7 +61,7 @@ cleanup() { rm -f "$RESTART_FLAG"; exit 0; }
 trap cleanup SIGINT SIGTERM
 
 while true; do
-    python run.py
+    python3 run.py
     if [ -f "$RESTART_FLAG" ]; then
         rm -f "$RESTART_FLAG"
         echo "Restarting server..."
