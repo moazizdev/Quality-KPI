@@ -5,7 +5,7 @@ from starlette.responses import FileResponse, JSONResponse
 from sqlalchemy import inspect, text
 
 from app.database import engine, Base
-from app.license import is_activated, get_machine_fingerprint
+from app.license import is_activated, get_machine_fingerprint, is_whitelisted, refresh_whitelist
 from app.routers import halls, machines, products, production, deviations, capa, complaints, kpi, auth, reports, backup, audit, departments, license, system
 
 # ─── Migration helpers (minimise DB round-trips for remote databases) ──────
@@ -59,6 +59,14 @@ def _run_migrations():
 Base.metadata.create_all(bind=engine)
 _run_migrations()
 
+# ─── Whitelist check on startup ─────────────────────────────────────────────
+whitelist_ok = refresh_whitelist()
+if whitelist_ok and is_whitelisted() is False:
+    import sys
+    print("FATAL: This server's fingerprint is not on the whitelist.")
+    print(f"       Fingerprint: {get_machine_fingerprint()}")
+    sys.exit(1)
+
 app = FastAPI(
     title="Quality KPI System",
     description="Quality Control and KPI tracking for manufacturing environments",
@@ -78,16 +86,31 @@ app.add_middleware(
 SKIP_LICENSE_PREFIXES = {"/license", "/auth/", "/js/", "/css/", "/icons/", "/favicon", "/manifest.json", "/sw.js"}
 
 
+import logging
+_logger = logging.getLogger("quality_kpi")
+
+
 @app.middleware("http")
 async def license_middleware(request: Request, call_next):
     path = request.url.path
     if path == "/" or any(path.startswith(p) for p in SKIP_LICENSE_PREFIXES):
         return await call_next(request)
+
     if not is_activated():
         return JSONResponse(
             status_code=402,
             content={"detail": "License required", "fingerprint": get_machine_fingerprint()},
         )
+
+    wl = is_whitelisted()
+    if wl is False:
+        return JSONResponse(
+            status_code=403,
+            content={"detail": "Server not authorized (whitelist check failed)", "fingerprint": get_machine_fingerprint()},
+        )
+    if wl is None:
+        _logger.warning("Whitelist not available; allowing request")
+
     return await call_next(request)
 
 
