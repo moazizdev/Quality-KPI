@@ -19,6 +19,7 @@ _DEFAULT_EXPIRY_DAYS = 30
 _WHITELIST_PUBLIC_KEY_HEX = "94080aec69b63657dbaa9ef9f42570deaed8114fa0b1ab6e7392755e763e5564"
 _WHITELIST_URL = "https://raw.githubusercontent.com/moazizdev/Quality-KPI/main/whitelist.json"
 _WHITELIST_CACHE_FILE = Path(__file__).resolve().parent.parent / ".whitelist_cache"
+_WHITELIST_LOCAL_FILE = Path(__file__).resolve().parent.parent / "whitelist.json"
 _WHITELIST_REFRESH_INTERVAL = 3600
 
 _whitelist_cache = None
@@ -53,30 +54,45 @@ def _verify_whitelist(data):
     return set(payload.get("fingerprints", [])), payload.get("expires")
 
 
+def _try_load(data):
+    global _whitelist_cache
+    result = _verify_whitelist(data)
+    if result is None:
+        return False
+    fingerprints, expires = result
+    _whitelist_cache = (fingerprints, expires, time.time())
+    return True
+
+
 def refresh_whitelist():
     global _whitelist_cache
-    now = time.time()
+
+    # 1. Try GitHub
     try:
         data = _fetch_whitelist()
-        result = _verify_whitelist(data)
-        if result is None:
-            return False
-        fingerprints, expires = result
-        _whitelist_cache = (fingerprints, expires, now)
-        _WHITELIST_CACHE_FILE.write_text(json.dumps(data))
-        return True
+        if _try_load(data):
+            _WHITELIST_CACHE_FILE.write_text(json.dumps(data))
+            return True
     except Exception:
-        if _WHITELIST_CACHE_FILE.exists():
-            try:
-                data = json.loads(_WHITELIST_CACHE_FILE.read_text())
-                result = _verify_whitelist(data)
-                if result:
-                    fingerprints, expires = result
-                    _whitelist_cache = (fingerprints, expires, now)
-                    return True
-            except Exception:
-                pass
-        return False
+        pass
+
+    # 2. Fall back to local whitelist.json (from repo)
+    try:
+        data = json.loads(_WHITELIST_LOCAL_FILE.read_text())
+        if _try_load(data):
+            return True
+    except Exception:
+        pass
+
+    # 3. Fall back to cached copy
+    try:
+        data = json.loads(_WHITELIST_CACHE_FILE.read_text())
+        if _try_load(data):
+            return True
+    except Exception:
+        pass
+
+    return False
 
 
 def is_whitelisted():
