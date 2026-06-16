@@ -16,6 +16,18 @@ else:
 
 
 def run_server():
+    ssl_keyfile = None
+    ssl_certfile = None
+
+    from run import ensure_cert
+    if ensure_cert():
+        from pathlib import Path
+        cert = Path(__file__).resolve().parent / ".certs" / "cert.pem"
+        key = Path(__file__).resolve().parent / ".certs" / "key.pem"
+        if cert.exists():
+            ssl_certfile = str(cert)
+            ssl_keyfile = str(key)
+
     import uvicorn
     uvicorn.run(
         "app.main:app",
@@ -23,6 +35,8 @@ def run_server():
         port=8000,
         log_level="warning",
         reload=False,
+        ssl_keyfile=ssl_keyfile,
+        ssl_certfile=ssl_certfile,
     )
 
 
@@ -41,6 +55,8 @@ def run_seed():
 
 
 def main():
+    os.environ["WEBKIT_IGNORE_SSL_ERRORS"] = "1"
+
     server_thread = threading.Thread(target=run_server, daemon=True)
     server_thread.start()
 
@@ -50,7 +66,7 @@ def main():
         import webview
         webview.create_window(
             "Quality KPI System",
-            "http://127.0.0.1:8000",
+            "https://127.0.0.1:8000",
             width=1280,
             height=800,
             resizable=True,
